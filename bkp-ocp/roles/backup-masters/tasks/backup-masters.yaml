@@ -1,0 +1,65 @@
+- name: Backup Master Servers - Create local backup master structure
+  file:
+    path: "{{ item }}"
+    state: directory
+  delegate_to: localhost
+  loop:
+    - "{{ BACKUPDIR }}"
+    - "{{ BACKUPDIR }}/etc/origin"
+    - "{{ BACKUPDIR }}/etc/sysconfig"
+    - "{{ BACKUPDIR }}/etc/cni"
+    - "{{ BACKUPDIR }}/etc/dnsmasq.d"
+    - "{{ BACKUPDIR }}/etc"
+    - "{{ BACKUPDIR }}/etc/pki/ca-trust"
+
+- name: Backup Master Servers - Copy Origin Files
+  synchronize:
+    src: /etc/origin/
+    dest: "{{ BACKUPDIR }}/etc/origin"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Master Servers - Copy Sysconfig Files
+  synchronize:
+    src: /etc/sysconfig/
+    dest: "{{ BACKUPDIR }}/etc/sysconfig"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Master Servers - Copy CNI Files
+  synchronize:
+    src: /etc/cni/
+    dest: "{{ BACKUPDIR }}/etc/cni"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Master Servers - Copy DNSMASQ Files
+  synchronize:
+    src: /etc/dnsmasq.d/
+    dest: "{{ BACKUPDIR }}/etc/dnsmasq.d"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Master Servers - Copy DNSMASQ CONF Files
+  synchronize:
+    src: /etc/dnsmasq.conf
+    dest: "{{ BACKUPDIR }}/etc"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Master Servers - Copy Certificates Files
+  synchronize:
+    src: /etc/pki/ca-trust/
+    dest: "{{ BACKUPDIR }}/etc/pki/ca-trust"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Master Servers - Generate Package List from Master Servers
+  shell: "rpm -qa | sort"
+  register: packages
+
+- name: Backup Master Servers - Save listed packages to packages.txt
+  copy:
+    content: "{{ packages.stdout_lines }}"
+    dest: "{{ BACKUPDIR }}/packages.txt"
+  delegate_to: localhost

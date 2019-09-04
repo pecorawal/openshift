@@ -1,0 +1,90 @@
+- name: Backup Master Servers - Create local backup master structure
+  file:
+    path: "{{ item }}"
+    state: directory
+  delegate_to: localhost
+  loop:
+    - "{{ BACKUPDIR }}"
+    - "{{ BACKUPDIR }}/etc"
+    - "{{ BACKUPDIR }}/etc/cni"
+    - "{{ BACKUPDIR }}/etc/origin"
+    - "{{ BACKUPDIR }}/etc/sysconfig"
+    - "{{ BACKUPDIR }}/etc/pki/ca-trust/source/anchors/"
+
+- name: Backup Nodes Servers - Copy Origin Files
+  synchronize:
+    src: /etc/origin/
+    dest: "{{ BACKUPDIR }}/etc/origin"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy Atomic Files
+  synchronize:
+    src: /etc/sysconfig/atomic-openshift-node
+    dest: "{{ BACKUPDIR }}/etc/sysconfig/"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy IPTables Files
+  synchronize:
+    src: /etc/sysconfig/iptables
+    dest: "{{ BACKUPDIR }}/etc/sysconfig/iptables"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy Docker Storage Setup Files
+  synchronize:
+    src: /etc/sysconfig/docker-storage-setup
+    dest: "{{ BACKUPDIR }}/etc/sysconfig/docker-storage-setup"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy Docker Files
+  synchronize:
+    src: /etc/sysconfig/docker
+    dest: "{{ BACKUPDIR }}/etc/sysconfig/docker"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy Docker Network Files
+  synchronize:
+    src: /etc/sysconfig/docker-network
+    dest: "{{ BACKUPDIR }}/etc/sysconfig/docker-network"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy Docker Storage Files
+  synchronize:
+    src: /etc/sysconfig/docker-storage
+    dest: "{{ BACKUPDIR }}/etc/sysconfig/docker-storage"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy CNI Files
+  synchronize:
+    src: /etc/cni/
+    dest: "{{ BACKUPDIR }}/etc/cni"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy DNSMASQ Files
+  synchronize:
+    src: /etc/dnsmasq.d/
+    dest: "{{ BACKUPDIR }}/etc/dnsmasq.d"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy DNSMASQ CONF Files
+  synchronize:
+    src: /etc/dnsmasq.conf
+    dest: "{{ BACKUPDIR }}/etc"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Backup Nodes Servers - Copy Certificates Files
+  synchronize:
+    src: /etc/pki/ca-trust/source/anchors/
+    dest: "{{ BACKUPDIR }}/etc/pki/ca-trust/source/anchors/"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+

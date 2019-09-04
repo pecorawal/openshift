@@ -1,0 +1,37 @@
+- name: Backup Project Objects - Check Backup Directory Exists
+
+  stat:
+    path: "{{ BACKUPDIR }}"
+  register: backup_directory
+
+- name: Backup Project Objects - Create Backup Master Structure
+  file:
+    path: "{{ item }}"
+    state: directory
+  delegate_to: localhost
+  loop:
+    - "{{ BACKUPDIR }}"
+
+- name: Get inside OCP cluster to get access of master PODS
+  shell: oc login "{{ OCADDRESS }}" -u "{{ OCUSER }}" --insecure-skip-tls-verify
+
+- name: Check OC login (whoami)
+  shell: oc whoami
+  register: oc_whoami
+  changed_when: false
+  failed_when: "OCUSER not in oc_whoami.stdout_lines or oc_whoami.rc != 0"
+
+- name: Backup Project Objects - Generate List of Projects
+  shell: oc get projects | awk '{print $1}' | grep -v NAME
+  ignore_errors: yes
+  changed_when: false
+  register: projects
+
+- set_fact:
+    projects={{ projects.stdout_lines }}
+
+- name: Backup Project Objects - Openshift Export Objects
+  shell: "oc -n {{ item.0 }} get --export {{ item.1 }} -o yaml > {{ BACKUPDIR }}/{{ item.0 }}_{{ item.1 }}.yaml"
+  with_nested:
+    - "{{ projects }}"
+    - "{{ objects }}"

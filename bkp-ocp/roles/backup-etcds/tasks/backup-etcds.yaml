@@ -1,0 +1,54 @@
+- name: Backup ETCD Servers - Create local backup etcd structure
+  file:
+    path: "{{ BACKUPDIR }}"
+    state: directory
+  delegate_to: localhost
+
+- name: Get the Endpoints
+  shell: grep https "{{ ETCD_POD_MANIFEST }}" | cut -d '/' -f3
+  register: ETCD_EP
+
+- debug:
+    var: ETCD_EP
+
+- name: Get inside OCP cluster to get access of ETCDs PODS
+  shell: oc login "{{ OCADDRESS }}" -u "{{ OCUSER }}" --insecure-skip-tls-verify
+
+- name: Check OC login (whoami)
+  shell: oc whoami
+  register: oc_whoami
+  changed_when: false
+  failed_when: "OCUSER not in oc_whoami.stdout_lines or oc_whoami.rc != 0"
+
+- name: Get the ETCDs PODS
+  shell: oc get pods -n "{{ OCPROJECT }}" | grep -o '\S*etcd\S*'
+  register: ETCD_POD
+
+- debug:
+    var: ETCD_POD
+
+- name: Go to Kube-System Project
+  shell: oc project "{{ OCPROJECT }}"
+
+- debug:
+    msg: "{{ ETCD_POD }}"
+
+- name: Execute and save the Snapshot
+  shell: "oc exec {{ item }} -c etcd -- /bin/bash -c 'ETCDCTL_API=3 etcdctl --cert {{ CERT }} --key {{ KEY }} --cacert {{ CACERT }} --endpoints {{ ETCD_EP.stdout }} snapshot save /var/lib/etcd/snapshot.db'"
+  loop: "{{ ETCD_POD.stdout_lines }}"
+  when: "ansible_hostname in item"
+
+- name: Backup ETCD Directory to Host
+  synchronize:
+    src: /etc/etcd
+    dest: "{{ BACKUPDIR }}"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+
+- name: Copy Snapshot to Backup Host
+  synchronize:
+    src: /var/lib/etcd/snapshot.db
+    dest: "{{ BACKUPDIR }}"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+

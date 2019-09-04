@@ -1,0 +1,13 @@
+BACKUPDIR: "/backupOCP/{{ansible_date_time.date}}/etcds/{{ ansible_hostname }}"
+ETCD_POD_MANIFEST: /etc/origin/node/pods/etcd.yaml
+
+## Authentication variables for accessing OpenShift cluster or
+OCADDRESS: "https://ocp.dc1.example.com:443"
+OCUSER: "system:admin"
+#OCPASS: "XXXXXXXXXXXXXX"
+OCPROJECT: "kube-system"
+
+CERT: "/etc/etcd/peer.crt"
+KEY: "/etc/etcd/peer.key"
+CACERT: "/etc/etcd/ca.crt"
+

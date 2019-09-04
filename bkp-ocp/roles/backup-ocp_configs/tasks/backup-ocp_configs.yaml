@@ -1,0 +1,15 @@
+- name: Backup extra OCP config from Master Servers - Create local backup ocp_configs structure
+  file:
+    path: "{{ BACKUPDIR }}"
+    state: directory
+  delegate_to: localhost
+
+- name: Backup extra OCP config files - Copy files
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ BACKUPDIR }}"
+    rsync_path: "/usr/bin/rsync"
+    mode: pull
+  register: sync_files
+  loop: "{{ OCP_EXTRA_FILES }}"
+
