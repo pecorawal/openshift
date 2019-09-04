@@ -34,8 +34,8 @@ logrotate_scripts=[{"name": "syslog", "path": "/var/log/cron\n/var/log/maillog\n
 ###########################################################################
 
 #oreg_url=registry.redhat.io/openshift/ose-${component}:${version}
-oreg_auth_user='11009103|pecoratestpurposes'
-oreg_auth_password='eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI4ZWQxNzBhZTJlODM0NDE0YTg3ODU4MTI2YTRkODFiZiJ9.lv4buOoGn_9cPOEAGiB2Ggjb989Ea3BT-9zTvP7seH9dG9dkBXR7P4CMZJ3VcUYAumeL7dlzXjSiBK6QqY4FyHQMsBajn-LQSv9PNYW_upeegE7HfqTdhUrBodCrWQjd6_tzKD50E4rs5djWy8ClrHE0GKgJpaiKDubrpIu8wgvC2tiKgdrg_0Nyxo9XSqKxolYxvBHKNf5LKC3yPIuUV4562lG3Lt2yv0P0O0fsHW2SrQ_s-KYfdKKEqXQnZ3HB36eC3iJeZ9AuzXfg9IREuO7R2ZwRhKQD6A8fcRiANPGCRk7Xt0YMl0UVW35TObpCHAMEWXxtl9CX2GLZC2Z-9yjGv_IaM66sD0K5g3v6N6EalNs4UsY7LOs4V506gviawTOFwDV9d0jsIMQP-yExuIVdcL31HRm5Aff6vBNE-0fwZgO0fyYYWodg1cVGzio-qO3fW809vZhzjOmCxtwMvPyq7HNqs1w83OPmKRqyADyibUreemqTkekVaS3uawu_1HD5M_UHib2LTpG7aNuMfeJggts2oOhKbo1ckS47_BK28aHfm_pbleaTZC-9jxSuWW47HHSJHKXb3_Z3USRdsJnEeHQN2Q5TxHOe9C5bzSxuCWzT8dkSjCohXVfilJmU1nZHcNs4Tq_JML0VjFTfZclaLRgPPqmEVTqU0IONL_E'
+oreg_auth_user='99999999|sampleusers'
+oreg_auth_password='aaaalss0VjFTfZclaLRgPPqmEVTqU4440IONL_Ebbb'
 
 
 
@@ -77,11 +77,7 @@ os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
 # HTPASSWD Authentication Only
 openshift_master_identity_providers=[{'name': 'Usuário Local', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
 
-# LDAP AND HTPASSWD Authentication (download ipa-ca.crt first)
-#openshift_master_identity_providers=[{'name': 'ldap', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider','attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com', 'bindPassword': 'r3dh4t1!', 'ca': '/etc/origin/master/ipa-ca.crt','insecure': 'false', 'url': 'ldaps://ipa.shared.example.opentlc.com:636/cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com)'},{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
 
-# Just LDAP
-#openshift_master_identity_providers=[{'name': 'ldap', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider','attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com', 'bindPassword': 'r3dh4t1!', 'ca': '/etc/origin/master/ipa-ca.crt','insecure': 'false', 'url': 'ldaps://ipa.shared.example.opentlc.com:636/cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com)'}]
 ###########################################################################
 ### OpenShift Metrics and Logging Vars
 ###########################################################################
